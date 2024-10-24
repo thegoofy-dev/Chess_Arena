@@ -56,4 +56,31 @@ io.on("connection", (client) => {
     }
     console.log("disconnected", client.id);
   });
+
+  // Handle move events
+  client.on("move", (move) => {
+    try {
+      // Validate the player's turn
+      if (
+        (chess.turn() === "w" && client.id !== players.white) ||
+        (chess.turn() === "b" && client.id !== players.black)
+      ) {
+        client.emit("Invalid Move", "Not your turn");
+        return;
+      }
+
+      const result = chess.move(move);
+      if (result) {
+        currentPlayer = chess.turn();
+        io.emit("move", move);
+        io.emit("boardState", chess.fen());
+      } else {
+        console.log("Invalid move:", move);
+        client.emit("Invalid Move", move);
+      }
+    } catch (error) {
+      console.log(error);
+      client.emit("Invalid Move", move);
+    }
+  });
 });
