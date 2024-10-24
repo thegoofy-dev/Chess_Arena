@@ -46,4 +46,14 @@ io.on("connection", (client) => {
 
   // Send initial board state to client
   client.emit("boardState", chess.fen());
+
+  // Handle disconnection
+  client.on("disconnect", () => {
+    if (client.id === players.white) {
+      delete players.white;
+    } else if (client.id === players.black) {
+      delete players.black;
+    }
+    console.log("disconnected", client.id);
+  });
 });
