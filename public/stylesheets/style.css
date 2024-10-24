@@ -1,0 +1,68 @@
+.chessboard {
+  position: relative; /* Position relative for the pseudo-element */
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  width: 400px;
+  height: 400px;
+  border-radius: 15px; /* Rounded corners */
+  overflow: hidden; /* Prevent overflow of the pseudo-element */
+}
+
+.chessboard::before {
+  content: "";
+  position: absolute;
+  top: -5px; /* Adjust to create a border effect */
+  left: -5px; /* Adjust to create a border effect */
+  right: -5px; /* Adjust to create a border effect */
+  bottom: -5px; /* Adjust to create a border effect */
+  background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Gradient colors */
+  border-radius: 20px; /* More rounded corners for the gradient */
+  z-index: -1; /* Send the gradient behind the chessboard */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Optional shadow for depth */
+}
+
+.piece.white {
+  color: white;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 1));
+}
+
+.piece.black {
+  color: black;
+}
+
+.flipped {
+  transform: rotate(180deg);
+}
+
+.square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.square.light {
+  background-color: #f0d9b5;
+}
+
+.square.dark {
+  background-color: #b58863;
+}
+
+.piece {
+  font-size: 36px;
+  cursor: pointer;
+}
+
+.piece.draggable {
+  cursor: grab;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+/* Rotate pieces for black player */
+.flipped .piece {
+  transform: rotate(180deg);
+}
