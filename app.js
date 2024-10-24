@@ -16,17 +16,34 @@ const io = socket(server);
 
 const chess = new Chess();
 let players = {};
-let currentPlayer = "W";
+let currentPlayer = "w";
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  res.render("index", {title:"Custom Chess Arena"});
+  res.render("index", { title: "Custom Chess Arena" });
 });
 
 server.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`);
 });
 
-// Additional Socket.io logic would go here, if necessary.
+// Socket.io logic
+io.on("connection", (client) => {
+  console.log("Client Connected ID :", client.id);
+
+  // Assign roles to players
+  if (!players.white) {
+    players.white = client.id;
+    client.emit("playerRole", "w");
+  } else if (!players.black) {
+    players.black = client.id;
+    client.emit("playerRole", "b");
+  } else {
+    client.emit("spectatorRole");
+  }
+
+  // Send initial board state to client
+  client.emit("boardState", chess.fen());
+});
