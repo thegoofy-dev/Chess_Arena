@@ -75,18 +75,13 @@ const renderBoard = () => {
 
 const handleMove = (source, target) => {
   const move = {
-    form: `${String.fromCharCode(97 + source.col)}${8 - source.row}`,
+    from: `${String.fromCharCode(97 + source.col)}${8 - source.row}`,  // Corrected from 'form' to 'from'
     to: `${String.fromCharCode(97 + target.col)}${8 - target.row}`,
     promotion: "q",
   };
-  socket.emit("move", move); // promote to queen for simplicity
 
-  if (move) {
-    renderBoard(); // Re-render the board after a move
-    socket.emit("move", move); // Emit the move to the server
-  } else {
-    console.error("Invalid move");
-  }
+  socket.emit("move", move);
+  renderBoard();
 };
 
 const getPieceUnicode = (piece) => {
@@ -107,6 +102,27 @@ const getPieceUnicode = (piece) => {
 
   return pieceMapping[piece.type] || ""; // Return corresponding Unicode character
 };
+
+// Socket event listeners
+socket.on("playerRole", (role) => {
+  playerRole = role;
+  renderBoard();
+});
+
+socket.on("spectatorRole", () => {
+  playerRole = null;
+  renderBoard();
+});
+
+socket.on("boardState", (fen) => {
+  chess.load(fen);
+  renderBoard();
+});
+
+socket.on("move", (move) => {
+  chess.move(move);
+  renderBoard();
+});
 
 // Call renderBoard to initialize the chessboard
 renderBoard();
