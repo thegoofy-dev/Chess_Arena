@@ -18,13 +18,13 @@ Iterate over the board array and create square elements for each cell.
 Create piece elements for occupied squares and append them to square elements.
 Flip the board for the black player's view.
 
+Unicode Chess Pieces:
+Return Unicode characters representing chess pieces based on their type.
+
 Handling Moves:
 Handle player moves when dragging and dropping pieces.
 Construct a move object containing the source and target squares in algebraic notation.
 Emit a "move" event to the server via Socket.io.
-
-Unicode Chess Pieces:
-Return Unicode characters representing chess pieces based on their type.
 
 Socket.io Event Handlers:
 Listen for various events from the server such as player role assignment, spectator role assignment, board state updates, and opponent moves.

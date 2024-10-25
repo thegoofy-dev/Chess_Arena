@@ -3,7 +3,7 @@ const chess = new Chess();
 const boardElement = document.querySelector(".chessboard");
 
 let draggedPiece = null;
-let sourceSquare = null; 
+let sourceSquare = null;
 let playerRole = null;
 
 const renderBoard = () => {
@@ -27,7 +27,7 @@ const renderBoard = () => {
           "piece",
           square.color === "w" ? "white" : "black" // Set piece color
         );
-        pieceElement.innerText = ""; // Set piece display
+        pieceElement.innerText = getPieceUnicode(square); // Set piece display
 
         pieceElement.draggable = playerRole === square.color; // Allow dragging for the current player's pieces
 
@@ -57,7 +57,8 @@ const renderBoard = () => {
       // Handle piece drop
       squareElement.addEventListener("drop", (e) => {
         e.preventDefault(); // Prevent default behavior
-        if (draggedPiece) { // If a piece is being dragged
+        if (draggedPiece) {
+          // If a piece is being dragged
           const targetSquare = {
             row: parseInt(squareElement.dataset.row),
             col: parseInt(squareElement.dataset.col),
@@ -74,7 +75,24 @@ const renderBoard = () => {
 
 const handleMove = (source, target) => {};
 
-const getPieceUnicode = (square) => {};
+const getPieceUnicode = (piece) => {
+  const pieceMapping = {
+    p: "♟", // Pawn
+    r: "♖", // Rook
+    n: "♞", // Knight
+    b: "♗", // Bishop
+    q: "♕", // Queen
+    k: "♔", // King
+    P: "♙", // White Pawn
+    R: "♖", // White Rook
+    N: "♘", // White Knight
+    B: "♗", // White Bishop
+    Q: "♕", // White Queen
+    K: "♔", // White King
+  };
+
+  return pieceMapping[piece.type] || ""; // Return corresponding Unicode character
+};
 
 // Call renderBoard to initialize the chessboard
 renderBoard();
