@@ -73,7 +73,21 @@ const renderBoard = () => {
   });
 };
 
-const handleMove = (source, target) => {};
+const handleMove = (source, target) => {
+  const move = {
+    form: `${String.fromCharCode(97 + source.col)}${8 - source.row}`,
+    to: `${String.fromCharCode(97 + target.col)}${8 - target.row}`,
+    promotion: "q",
+  };
+  socket.emit("move", move); // promote to queen for simplicity
+
+  if (move) {
+    renderBoard(); // Re-render the board after a move
+    socket.emit("move", move); // Emit the move to the server
+  } else {
+    console.error("Invalid move");
+  }
+};
 
 const getPieceUnicode = (piece) => {
   const pieceMapping = {
